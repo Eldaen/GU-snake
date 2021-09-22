@@ -54,7 +54,7 @@ class GameScene: SKScene {
         self.addChild(clockwiseButton) // отправили кнопку на сцену
         
         
-        
+        createApple()
         
     }
     
@@ -100,5 +100,15 @@ class GameScene: SKScene {
     // обновление кадров, запускается каждый раз перед отрисовкой след. кадра
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
+    }
+    
+    // Создаём яблоко в рандомной точке на сцене, не за пределами экрана
+    func createApple() {
+        let randomX = CGFloat(arc4random_uniform(UInt32(view!.scene!.frame.maxX - 5)))
+        let randomY = CGFloat(arc4random_uniform(UInt32(view!.scene!.frame.maxY - 5)))
+        
+        let apple = Apple(position: CGPoint(x: randomX, y: randomY))
+        
+        self.addChild(apple)
     }
 }
