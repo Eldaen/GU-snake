@@ -25,6 +25,7 @@ class GameScene: SKScene {
         
         // кнопки управления змейкой
         
+        //1
         let counterClockwiseButton = SKShapeNode()
         
         // задаём форму круга, .cgPatch как-то подтверждает создание
@@ -39,15 +40,55 @@ class GameScene: SKScene {
         self.addChild(counterClockwiseButton) // отправили кнопку на сцену
         
         
+        //2
+        let clockwiseButton = SKShapeNode()
+        
+        clockwiseButton.path = UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: 45, height: 45)).cgPath
+        clockwiseButton.position = CGPoint(x: view.scene!.frame.maxX - 80, y: view.scene!.frame.minY + 30)
+        
+        clockwiseButton.fillColor = .magenta
+        clockwiseButton.strokeColor = .magenta // рамка
+        clockwiseButton.lineWidth = 10 // размер рамки
+        clockwiseButton.name = "clockwiseButton" // кнопке нужно имя, для проверок
+        
+        self.addChild(clockwiseButton) // отправили кнопку на сцену
+        
+        
+        
+        
     }
     
     // произошло нажатие
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
+        for touch in touches {
+            let touchLocation = touch.location(in: self) // проверяем, куда было нажатие
+            
+            // Проверяем факт нажатия по кнопкам, а не куда-то ещё
+            guard let touchNode = self.atPoint(touchLocation) as? SKShapeNode, touchNode.name == "counterClockwiseButton" || touchNode.name == "clockwiseButton" else {
+                return
+            }
+            
+            // красим кнопку в красный по нажатию
+            touchNode.fillColor = .red
+        }
+        
     }
     
     // убрал палец с экрана
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        for touch in touches {
+            let touchLocation = touch.location(in: self) // проверяем, куда было нажатие
+            
+            // Проверяем факт нажатия по кнопкам, а не куда-то ещё
+            guard let touchNode = self.atPoint(touchLocation) as? SKShapeNode, touchNode.name == "counterClockwiseButton" || touchNode.name == "clockwiseButton" else {
+                return
+            }
+            
+            // красим кнопку в красный по нажатию
+            touchNode.fillColor = .magenta // Кнопку отпустили? Красим обратно
+        }
         
     }
     
