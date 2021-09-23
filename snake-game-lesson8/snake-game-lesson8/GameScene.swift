@@ -8,6 +8,14 @@
 import SpriteKit
 import GameplayKit
 
+// создаём числа для битовой маски, чтобы можно было определять, к какой группе объект относится и с чем он может столкнуться
+struct CollisionCategory {
+    static let Snake: UInt32 = 0x1 << 0     // 0001
+    static let SnakeHead: UInt32 = 0x1 << 1 // 0010
+    static let Apple: UInt32 = 0x1 << 2     // 0100
+    static let EdgeBody: UInt32 = 0x1 << 3  // 1000
+}
+
 class GameScene: SKScene {
     
     var snake: Snake?
@@ -59,6 +67,13 @@ class GameScene: SKScene {
         
         snake = Snake(atPoint: CGPoint(x: view.scene!.frame.midX, y: view.scene!.frame.midY))
         self.addChild(snake!)
+        
+        // делаем нашу сцену площадкой, на которой могут происходить взаимодействия (столкновения)
+        self.physicsWorld.contactDelegate = self
+        
+        // задаём, с чем может сцена столкнуться
+        self.physicsBody?.categoryBitMask = CollisionCategory.EdgeBody
+        self.physicsBody?.categoryBitMask = CollisionCategory.Snake | CollisionCategory.SnakeHead
     }
     
     // произошло нажатие
@@ -120,5 +135,31 @@ class GameScene: SKScene {
         let apple = Apple(position: CGPoint(x: randomX, y: randomY))
         
         self.addChild(apple)
+    }
+}
+
+// делаем расширение с протоколом SKPhysicsContactDelegate чтобы отслеживать столкновения
+extension GameScene: SKPhysicsContactDelegate {
+    func didBegin(_ contact: SKPhysicsContact) {
+        let bodies = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask // складываем битмаски при столкновенни, например 0100 + 0010 = 8 + 4 = 12
+        
+        let collisionObject = bodies - CollisionCategory.SnakeHead // вычитаем SnakeHead т.к. это единственный объект, который может столкнуться с чем-то
+        
+        // обрабатываем варианты столкновений, в зависимости от того, с чем столкнулась голова
+        switch collisionObject {
+        case CollisionCategory.Apple:
+            let apple = contact.bodyA.node is Apple ? contact.bodyA.node : contact.bodyB.node // определяем, какой из двух столкнувшихся тел - яблоко и записываем в apple
+            
+            // Удлинняем змею, удаляем яблоко со сцены, создаём новое
+            snake?.addBodyPart()
+            apple?.removeFromParent()
+            createApple()
+        
+        case CollisionCategory.EdgeBody:
+            // Доделать в ДЗ
+            break
+        default:
+            break
+        }
     }
 }

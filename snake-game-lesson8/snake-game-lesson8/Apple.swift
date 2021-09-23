@@ -19,6 +19,10 @@ class Apple: SKShapeNode { // SKShapeNode это чтобы мы могли со
         lineWidth = 5
         
         self.position = position
+        
+        // задаём яблоку физическое тело и делаем так, чтобы контакт был чуть раньше, чем у нас это отрисовывается
+        self.physicsBody = SKPhysicsBody(circleOfRadius: 10.0, center: CGPoint(x: 5, y: 5))
+        self.physicsBody?.categoryBitMask = CollisionCategory.Apple
     }
     
     required init?(coder aDecoder: NSCoder) {

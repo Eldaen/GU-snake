@@ -10,7 +10,7 @@ import SpriteKit
 
 class SnakeBodyPart: SKShapeNode {
     
-    let diameter = 10.0
+    let diameter: CGFloat = 10.0
     
     init (atPoint point: CGPoint) {
         super.init()
@@ -21,6 +21,11 @@ class SnakeBodyPart: SKShapeNode {
         lineWidth = 5
         
         self.position = point
+        
+        self.physicsBody = SKPhysicsBody(circleOfRadius: diameter, center: CGPoint(x: 5, y: 5))
+        self.physicsBody?.isDynamic = true // движется
+        self.physicsBody?.categoryBitMask = CollisionCategory.Snake
+        self.physicsBody?.contactTestBitMask = CollisionCategory.EdgeBody | CollisionCategory.Apple // это мы тут используем битовое ИЛИ, сравниваем биты одного числа и другого
     }
     
     required init?(coder aDecoder: NSCoder) {
