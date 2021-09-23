@@ -74,6 +74,12 @@ class GameScene: SKScene {
             
             // красим кнопку в красный по нажатию
             touchNode.fillColor = .red
+            
+            if touchNode.name == "clockwiseButton" {
+                snake!.moveClockwise()
+            } else if touchNode.name == "counterClockwiseButton" {
+                snake!.moveCounterClockwise()
+            }
         }
         
     }
@@ -103,6 +109,7 @@ class GameScene: SKScene {
     // обновление кадров, запускается каждый раз перед отрисовкой след. кадра
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
+        snake!.move()
     }
     
     // Создаём яблоко в рандомной точке на сцене, не за пределами экрана
