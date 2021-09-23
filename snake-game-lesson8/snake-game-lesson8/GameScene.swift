@@ -10,6 +10,7 @@ import GameplayKit
 
 class GameScene: SKScene {
     
+    var snake: Snake?
     
     // Всегда запускается первым, тут нужно сначала создавать объекты, а потом где-то ещё
     override func didMove(to view: SKView) {
@@ -56,6 +57,8 @@ class GameScene: SKScene {
         
         createApple()
         
+        snake = Snake(atPoint: CGPoint(x: view.scene!.frame.midX, y: view.scene!.frame.midY))
+        self.addChild(snake!)
     }
     
     // произошло нажатие
