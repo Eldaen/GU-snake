@@ -24,7 +24,7 @@ class GameViewController: UIViewController {
         
         scene.scaleMode = .resizeFill
         
-        // размещаем сцена на вью и отображаем
+        // размещаем сцену на вью и отображаем
         skView.presentScene(scene)
     }
 
