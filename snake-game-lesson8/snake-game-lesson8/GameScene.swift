@@ -225,6 +225,8 @@ class GameScene: SKScene {
         
         showGameOver()
         stopTheSnake()
+        
+        self.isPaused = true // Ставлю на паузу, чтобы не плодило Ноды. Дальше игра не пойдёт, увы.
     }
     
     func stopTheSnake() {
